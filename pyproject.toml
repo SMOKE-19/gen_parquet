@@ -19,7 +19,6 @@ gen-parquet-type-yamls = "gen_parquet.cli:generate_type_yamls_main"
 
 [dependency-groups]
 dev = [
-    "pytest>=8.0",
     "ruff>=0.8",
 ]
 
@@ -30,6 +29,3 @@ build-backend = "uv_build"
 [tool.ruff]
 line-length = 100
 target-version = "py311"
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]

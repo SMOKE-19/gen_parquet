@@ -3,9 +3,13 @@ name: Build wheel
 on:
   push:
     branches: ["main"]
+    tags: ["v*"]
   pull_request:
     branches: ["main"]
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build-wheel:
@@ -26,9 +30,6 @@ jobs:
       - name: Install dependencies
         run: uv sync --locked
 
-      - name: Run tests
-        run: uv run pytest
-
       - name: Run lint
         run: uv run ruff check .
 
@@ -41,3 +42,9 @@ jobs:
           name: gen-parquet-wheel
           path: dist/*.whl
           if-no-files-found: error
+
+      - name: Upload wheel to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.whl

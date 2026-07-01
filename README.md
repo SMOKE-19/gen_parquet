@@ -21,7 +21,8 @@ uv run ruff check .
 ```
 
 GitHub Actions의 `Build wheel` 워크플로는 `main` push, pull request, 수동 실행에서 wheel을
-빌드하고 `gen-parquet-wheel` artifact로 업로드합니다.
+빌드하고 `gen-parquet-wheel` artifact로 업로드합니다. `v*` 태그를 푸시하면 GitHub Release를
+생성하고 wheel 파일을 release asset으로 업로드합니다.
 
 ## 기본 사용
 
