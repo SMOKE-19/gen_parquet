@@ -20,6 +20,9 @@ uv run pytest
 uv run ruff check .
 ```
 
+GitHub Actions의 `Build wheel` 워크플로는 `main` push, pull request, 수동 실행에서 wheel을
+빌드하고 `gen-parquet-wheel` artifact로 업로드합니다.
+
 ## 기본 사용
 
 ```python
@@ -55,6 +58,14 @@ YAML은 `expressions` 또는 `layers` 키를 지원하며, 각 항목은 `column
 - `scripts/generate_type_yamls.py`: 상단 `TXT_DIR`를 수정해 폴더 안의 `.txt`별 YAML 생성
 - `scripts/convert_txt_to_parquet.py`: 상단 `TXT_PATH`, `TYPE_YAML_PATH`, `OUTPUT_PATH`를 수정해 Parquet 변환
 - `scripts/add_calculated_columns.py`: 상단 `LOGIC_YAML_PATH`, `PARQUET_PATH`, `OUTPUT_PATH`를 수정해 계산 컬럼 추가
+
+wheel을 설치한 가상환경에서는 다음 console script를 사용할 수 있습니다.
+
+```bash
+gen-parquet-type-yamls ./examples
+gen-parquet-convert input.txt input.yaml output.parquet
+gen-parquet-add-cols expression_logic.yaml input.parquet output.calculated.parquet
+```
 
 ## 구조
 
