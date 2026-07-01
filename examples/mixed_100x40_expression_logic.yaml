@@ -1,0 +1,7 @@
+expressions:
+  - column_name: score_band
+    sql_expression: CASE WHEN [score] >= 75 THEN 'HIGH' ELSE 'LOW' END
+  - column_name: active_label
+    sql_expression: If([active], 'ACTIVE', 'INACTIVE')
+  - column_name: nullable_int_plus_one
+    sql_expression: Integer([nullable_int]) + 1

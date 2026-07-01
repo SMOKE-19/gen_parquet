@@ -1,0 +1,92 @@
+# Column type suggestions for a tab-separated .txt file.
+# Move column names between type lists before converting to Parquet.
+# Uncomment exclude_cols entries to omit columns even if they also appear under types.
+# exclude_cols:
+#   - "column_to_skip"
+types:
+  boolean:
+    # samples: true, false, true, false, true, false, true, false, true, false
+    - "active"
+    # samples: yes, yes, no, yes, yes, no, yes, yes, no, yes
+    - "verified"
+    # samples: 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
+    - "is_deleted"
+    # samples: Y, Y, Y, N, Y, Y, Y, N, Y, Y
+    - "subscribed"
+    # samples: t, t, t, t, t, t, f, t, t, t
+    - "flagged"
+    # samples: true, false, true, false, true, false, true, false, true, false
+    - "nullable_bool"
+  integer:
+    # samples: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+    - "id"
+    # samples: 10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 10009, 10010
+    - "account_id"
+    # samples: 21, 22, 23, 24, 25, 26, 27, 28, 29, 30
+    - "age"
+    # samples: 3, 6, 9, 12, 15, 18, 21, 24, 27, 30
+    - "quantity"
+    # samples: 2021, 2022, 2023, 2024, 2025, 2026, 2020, 2021, 2022, 2023
+    - "year"
+    # samples: 501, 502, 503, 504, 505, 506, 507, 508, 509, 511
+    - "nullable_int"
+  float:
+    # samples: 70.13, 70.26, 70.39, 70.52, 70.65, 70.78, 70.91, 71.04, 71.17, 71.30
+    - "score"
+    # samples: 0.0100, 0.0200, 0.0300, 0.0400, 0.0500, 0.0600, 0.0700, 0.0800, 0.0900, 0.1000
+    - "ratio"
+    # samples: 1012.75, 1025.50, 1038.25, 1051.00, 1063.75, 1076.50, 1089.25, 1102.00, 1114.75, 1127.50
+    - "amount"
+    # samples: 0.005, 0.010, 0.015, 0.020, 0.025, 0.030, 0.035, 0.040, 0.045, 0.050
+    - "discount_rate"
+    # samples: 18.7, 19.4, 20.1, 20.8, 21.5, 22.2, 22.9, 23.6, 24.3, 25.0
+    - "temperature"
+    # samples: 1.25, 2.50, 3.75, 5.00, 6.25, 7.50, 8.75, 10.00, 11.25, 12.50
+    - "nullable_float"
+  date:
+    # samples: 2026-01-02, 2026-01-03, 2026-01-04, 2026-01-05, 2026-01-06, 2026-01-07, 2026-01-08, 2026-01-09, 2026-01-10, 2026-01-11
+    - "signup_date"
+    # samples: 2026-01-03, 2026-01-05, 2026-01-07, 2026-01-09, 2026-01-11, 2026-01-13, 2026-01-15, 2026-01-17, 2026-01-19, 2026-01-21
+    - "event_date"
+    # samples: 2026-02-01, 2026-02-02, 2026-02-03, 2026-02-04, 2026-02-05, 2026-02-06, 2026-02-07, 2026-02-08, 2026-02-09, 2026-02-10
+    - "due_date"
+    # samples: 1981-02-02, 1982-03-03, 1983-04-04, 1984-05-05, 1985-06-06, 1986-07-07, 1987-08-08, 1988-09-09, 1989-10-10, 1990-11-11
+    - "birth_date"
+    # samples: 2026-01-02, 2026-01-03, 2026-01-04, 2026-01-05, 2026-01-06, 2026-01-07, 2026-01-08, 2026-01-09, 2026-01-10, 2026-01-11
+    - "snapshot_date"
+    # samples: 2026-01-02, 2026-01-03, 2026-01-04, 2026-01-05, 2026-01-06, 2026-01-07, 2026-01-08, 2026-01-09, 2026-01-10, 2026-01-11
+    - "nullable_date"
+  datetime:
+    # samples: 2026-01-01T10:00:00, 2026-01-01T11:00:00, 2026-01-01T12:00:00, 2026-01-01T13:00:00, 2026-01-01T14:00:00, 2026-01-01T15:00:00, 2026-01-01T16:00:00, 2026-01-01T17:00:00, 2026-01-01T18:00:00, 2026-01-01T19:00:00
+    - "created_at"
+    # samples: 2026-01-02T09:15:00, 2026-01-03T09:15:00, 2026-01-04T09:15:00, 2026-01-05T09:15:00, 2026-01-06T09:15:00, 2026-01-07T09:15:00, 2026-01-08T09:15:00, 2026-01-09T09:15:00, 2026-01-10T09:15:00, 2026-01-11T09:15:00
+    - "updated_at"
+    # samples: 2026-01-01T09:09:00, 2026-01-01T09:18:00, 2026-01-01T09:27:00, 2026-01-01T09:36:00, 2026-01-01T09:45:00, 2026-01-01T09:54:00, 2026-01-01T10:03:00, 2026-01-01T10:12:00, 2026-01-01T10:21:00, 2026-01-01T10:30:00
+    - "login_at"
+    # samples: 2026-01-02T09:00:01, 2026-01-03T09:00:02, 2026-01-04T09:00:03, 2026-01-05T09:00:04, 2026-01-06T09:00:05, 2026-01-07T09:00:06, 2026-01-08T09:00:07, 2026-01-09T09:00:08, 2026-01-10T09:00:09, 2026-01-01T09:00:10
+    - "processed_at"
+    # samples: 2027-01-02T09:00:00, 2027-01-03T09:00:00, 2027-01-04T09:00:00, 2027-01-05T09:00:00, 2027-01-06T09:00:00, 2027-01-07T09:00:00, 2027-01-08T09:00:00, 2027-01-09T09:00:00, 2027-01-10T09:00:00, 2027-01-11T09:00:00
+    - "expired_at"
+    # samples: 2026-01-01T10:00:00, 2026-01-01T11:00:00, 2026-01-01T12:00:00, 2026-01-01T13:00:00, 2026-01-01T14:00:00, 2026-01-01T15:00:00, 2026-01-01T16:00:00, 2026-01-01T17:00:00, 2026-01-01T18:00:00, 2026-01-01T19:00:00
+    - "nullable_datetime"
+  string:
+    # samples: user_001, user_002, user_003, user_004, user_005, user_006, user_007, user_008, user_009, user_010
+    - "name"
+    # samples: Busan, Incheon, Daegu, Daejeon, Seoul, Busan, Incheon, Daegu, Daejeon, Seoul
+    - "city"
+    # samples: active, paused, closed, new, active, paused, closed, new, active, paused
+    - "status"
+    # samples: beta, gamma, delta, alpha, beta, gamma, delta, alpha, beta, gamma
+    - "category"
+    # samples: description row 1, description row 2, description row 3, description row 4, description row 5, description row 6, description row 7, description row 8, description row 9, description row 10
+    - "description"
+    # samples: C001, C002, C003, C004, C005, C006, C007, C008, C009, C010
+    - "code"
+    # samples: 00001, 00002, 00003, 00004, 00005, 00006, 00007, 00008, 00009, 00010
+    - "postal_code"
+    # samples: 123, 123, 123, 123, 123, 123, 123, 123, 123, 123
+    - "mixed_numeric_text"
+    # samples: <no non-empty values>
+    - "empty_text"
+    # samples: note with tab-safe text 1, note with tab-safe text 2, note with tab-safe text 3, note with tab-safe text 4, note with tab-safe text 5, note with tab-safe text 6, note with tab-safe text 7, note with tab-safe text 8, note with tab-safe text 9, note with tab-safe text 10
+    - "notes"
