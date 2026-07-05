@@ -16,13 +16,20 @@ YAML 기반 계산 컬럼 추가도 지원합니다.
 ```bash
 uv sync
 uv run gen-parquet
-uv run pytest
 uv run ruff check .
 ```
 
 GitHub Actions의 `Build wheel` 워크플로는 `main` push, pull request, 수동 실행에서 wheel을
 빌드하고 `gen-parquet-wheel` artifact로 업로드합니다. `v*` 태그를 푸시하면 GitHub Release를
 생성하고 wheel 파일을 release asset으로 업로드합니다.
+
+Release wheel을 내려받아 가상환경에 설치할 수도 있습니다.
+
+```bash
+python -m venv .venv
+. .venv/bin/activate
+pip install gen_parquet-0.1.0-py3-none-any.whl
+```
 
 ## 기본 사용
 
@@ -68,6 +75,96 @@ gen-parquet-convert input.txt input.yaml output.parquet
 gen-parquet-add-cols expression_logic.yaml input.parquet output.calculated.parquet
 ```
 
+## MCP 서버
+
+MCP stdio 서버는 optional dependency로 분리되어 있습니다.
+
+```bash
+pip install "gen-parquet[mcp]"
+gen-parquet-mcp
+```
+
+로컬 개발 환경에서는 다음처럼 실행할 수 있습니다.
+
+```bash
+uv sync --extra mcp
+uv run gen-parquet-mcp
+```
+
+## OpenCode에서 MCP 연결
+
+OpenCode는 stdio command로 MCP 서버를 실행할 수 있습니다. wheel을 설치한 가상환경을 사용할
+경우 OpenCode 설정의 MCP 서버 command를 해당 가상환경의 `gen-parquet-mcp`로 지정합니다.
+
+예시:
+
+```json
+{
+  "mcp": {
+    "gen-parquet": {
+      "type": "local",
+      "command": ".venv/bin/gen-parquet-mcp",
+      "enabled": true
+    }
+  }
+}
+```
+
+개발 checkout을 직접 연결할 때는 `uv run`을 command로 둘 수 있습니다.
+
+```json
+{
+  "mcp": {
+    "gen-parquet-dev": {
+      "type": "local",
+      "command": "uv",
+      "args": ["run", "gen-parquet-mcp"],
+      "enabled": true
+    }
+  }
+}
+```
+
+OpenCode에서 tool이 보이면 `inspect_parquet`, `generate_type_yaml`,
+`convert_txt_to_parquet`, `add_calculated_columns` 순서로 작은 예제 파일부터 호출해 연결을
+확인합니다.
+
+제공 tool:
+
+- `generate_type_yaml`
+- `generate_type_yamls_for_dir`
+- `convert_txt_to_parquet`
+- `add_calculated_columns`
+- `inspect_parquet`
+- `summarize_type_yaml`
+- `summarize_expression_yaml`
+
+## MCP 서버 개발 가이드
+
+MCP 서버 기능을 수정할 때는 아래 파일을 기준으로 작업합니다.
+
+- `src/gen_parquet/mcp_server.py`: OpenCode/MCP client에 노출할 tool 이름, 인자, docstring 등록
+- `src/gen_parquet/mcp_tools.py`: tool이 실제로 호출하는 Python 함수, 응답 dict, 에러 처리 구현
+- `src/gen_parquet/core.py`: TSV/YAML/Parquet 변환 핵심 로직 수정
+- `src/gen_parquet/expressions.py`: 계산 컬럼 expression YAML 파싱과 DuckDB SQL 변환 로직 수정
+- `pyproject.toml`: `mcp` optional dependency 또는 `gen-parquet-mcp` entrypoint 변경
+- `README.md`: OpenCode 연결 방법, 제공 tool 목록, 개발 시 수정 파일 목록 갱신
+
+새 MCP tool을 추가할 때는 먼저 `mcp_tools.py`에 JSON-safe dict를 반환하는 함수를 만들고,
+그 다음 `mcp_server.py`의 `build_server()` 안에서 `@server.tool()`로 등록합니다. tool이 새
+의존성을 필요로 하면 `pyproject.toml`의 기본 dependency 또는 `[project.optional-dependencies].mcp`
+중 맞는 위치에 추가하고 `uv lock`을 다시 실행합니다.
+
+수정 후 최소 확인:
+
+```bash
+uv lock
+uv sync --extra mcp
+uv run ruff check .
+uv run gen-parquet-mcp --help
+uv build --wheel
+```
+
 ## 구조
 
 ```text
@@ -76,9 +173,10 @@ gen_parquet/
 ├── src/gen_parquet/
 │   ├── __init__.py
 │   ├── cli.py
-│   └── core.py
-├── tests/
-│   └── test_core.py
+│   ├── core.py
+│   ├── expressions.py
+│   ├── mcp_server.py
+│   └── mcp_tools.py
 ├── examples/
 └── scripts/
 ```

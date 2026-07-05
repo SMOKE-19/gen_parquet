@@ -11,10 +11,16 @@ dependencies = [
     "pyyaml>=6.0",
 ]
 
+[project.optional-dependencies]
+mcp = [
+    "mcp>=1.0.0",
+]
+
 [project.scripts]
 gen-parquet = "gen_parquet.cli:main"
 gen-parquet-add-cols = "gen_parquet.cli:add_calculated_columns_main"
 gen-parquet-convert = "gen_parquet.cli:convert_txt_to_parquet_main"
+gen-parquet-mcp = "gen_parquet.mcp_server:main"
 gen-parquet-type-yamls = "gen_parquet.cli:generate_type_yamls_main"
 
 [dependency-groups]
